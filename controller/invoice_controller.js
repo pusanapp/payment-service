@@ -16,12 +16,18 @@ const createInvoice = async (req, res) => {
 }
 
 const callBacksInvoicePayment = async (req,res) =>{
-    console.log("PAYMENT RECEIVED")
-    const data = req.body;
-    res.send({
-        data: data
-    })
-
+    const token = req.headers['x-callback-token']
+    if(token){
+        console.log("PAYMENT RECEIVED")
+        const data = req.body;
+        res.send({
+            data: data
+        })
+    }else {
+        res.status(401).send({
+            err: 'token not found'
+        })
+    }
 
 }
 
