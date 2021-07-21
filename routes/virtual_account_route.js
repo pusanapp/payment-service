@@ -4,6 +4,6 @@ const virtualAccountController = require('../controller/virtual_account_controll
 
 router.get('/banks', virtualAccountController.getAllVABanks)
 router.post('/create', virtualAccountController.createVirtualAccount)
-router.post('/check/:id', virtualAccountController.createVirtualAccount)
+router.post('/check/:id', virtualAccountController.getVirtualAccount)
 router.post('/update/:id', virtualAccountController.updateVirtualAccount)
 module.exports = router
