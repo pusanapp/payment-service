@@ -1,7 +1,9 @@
-
+const model = require('../models/index')
 const { VirtualAcc } = require('../util/xendit_config');
+const axios = require("axios");
 const vaSpecificOptions = {};
 const va = new VirtualAcc(vaSpecificOptions);
+const Payment = model.app_payment;
 
 const getAllVABanks = async (req,res) => {
     try {
@@ -28,12 +30,31 @@ const createVirtualAccount = async (req,res)=>{
             expectedAmt: data.amount,
             isSingleUse: true
         })
-        console.log(resp)
-        res.send({
-            data: resp
+        const saveData = {
+            transaction_id: data.transaction_id,
+            invoice_number: data.external_id,
+            payment_method: resp.bank_code,
+            payment_number: resp.account_number,
+            amount: resp.expected_amount,
+            expiration_date: resp.expiration_date,
+            xendit_id: resp.id
+        }
+        await Payment.create(saveData).then(result=>{
+            res.send({
+                status: true,
+                message: 'virtual account payment created',
+                data: result
+            })
         })
+        // res.send({
+        //
+        //     data: resp
+        // })
     }catch (e) {
-        res.send({err: e.message})
+        res.send({
+            status: true,
+            message: e.message
+        })
     }
 
 }
@@ -68,12 +89,27 @@ const updateVirtualAccount = async (req,res) => {
 }
 
 const callbackPayment = async (req, res) => {
-    const data = req.body.data
+    const token = req.headers['x-callback-token']
+    if(token){
+        console.log("PAYMENT RECEIVED")
+        const data = req.body;
+        const {data: response} = await axios.post(`http://116.193.191.200/transaction-service/api/v1/transaction/update/${data.external_id}`)
+        console.log(response)
+        //update transaction payment status
+        res.send({
+            data: data
+        })
+    }else {
+        res.status(401).send({
+            err: 'token not found'
+        })
+    }
 }
 
 module.exports = {
     getAllVABanks,
     createVirtualAccount,
     getVirtualAccount,
-    updateVirtualAccount
+    updateVirtualAccount,
+    callbackPayment
 }

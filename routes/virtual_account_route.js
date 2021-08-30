@@ -6,4 +6,5 @@ router.get('/banks', virtualAccountController.getAllVABanks)
 router.post('/create', virtualAccountController.createVirtualAccount)
 router.post('/check/:id', virtualAccountController.getVirtualAccount)
 router.post('/update/:id', virtualAccountController.updateVirtualAccount)
+router.post('/payment/callback', virtualAccountController.callbackPayment)
 module.exports = router
