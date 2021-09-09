@@ -6,6 +6,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const virtualAccountRouter = require('./routes/virtual_account_route')
 const invoiceRouter = require('./routes/invoice_route')
+const midTransRouter = require('./routes/midtrans_route')
 const app = express();
 
 app.use(logger('dev'));
@@ -17,5 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api/v1/va', virtualAccountRouter);
 app.use('/api/v1/invoice', invoiceRouter);
+app.use('/api/v1/midtrans', midTransRouter);
 
 module.exports = app;

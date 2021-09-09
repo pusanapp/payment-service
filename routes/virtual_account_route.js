@@ -11,4 +11,5 @@ router.post('/payment/callback', virtualAccountController.callbackPayment)
 router.post('/tes', midTransController.createCharge)
 router.get('/tes/:id', midTransController.getTransactionStatus)
 router.post('/tes/callback', midTransController.callbackPayment)
+router.get('/payment/all', virtualAccountController.getAllPaymentMethods)
 module.exports = router

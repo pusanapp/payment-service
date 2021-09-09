@@ -4,7 +4,19 @@ const axios = require("axios");
 const vaSpecificOptions = {};
 const va = new VirtualAcc(vaSpecificOptions);
 const Payment = model.app_payment;
+const Method = model.payment_method;
 
+const getAllPaymentMethods = async (req, res) => {
+    await Method.findAll({}).then(result=>{
+        res.send({
+            status: true,
+            message: 'get all payment method',
+            data: result
+        })
+    }).catch(err=>{
+        res.send({err: err.message})
+    })
+}
 const getAllVABanks = async (req,res) => {
     try {
 
@@ -111,5 +123,6 @@ module.exports = {
     createVirtualAccount,
     getVirtualAccount,
     updateVirtualAccount,
-    callbackPayment
+    callbackPayment,
+    getAllPaymentMethods
 }
