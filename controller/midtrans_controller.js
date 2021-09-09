@@ -101,13 +101,15 @@ const callbackPayment = async (req, res) => {
         if (data.transaction_status === 'capture'){
             // capture only applies to card transaction, which you need to check for the fraudStatus
             if (data.fraud_status === 'challenge'){
-                const {data: response} = await axios.post(`https://pusanair-dev.xyz/transaction-service/api/v1/transaction/update/${data.order_id}`)
-                console.log(response)
+
             } else if (data.fraud_status === 'accept'){
                 // TODO set transaction status on your databaase to 'success'
+                const {data: response} = await axios.post(`https://pusanair-dev.xyz/transaction-service/api/v1/transaction/update/${data.order_id}`)
+                console.log(response)
             }
         } else if (data.transaction_status === 'settlement'){
-            // TODO set transaction status on your databaase to 'success'
+            const {data: response} = await axios.post(`https://pusanair-dev.xyz/transaction-service/api/v1/transaction/update/${data.order_id}`)
+            console.log(response)
         } else if (data.transaction_status === 'deny'){
             // TODO you can ignore 'deny', because most of the time it allows payment retries
             // and later can become success
